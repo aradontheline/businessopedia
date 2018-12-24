@@ -1,0 +1,10 @@
+.container1{
+    background-color: darkblue;
+    margin-top: 1vh;
+    color:white;
+    border-radius: 1vh;
+    padding:2vh;
+    margin-bottom: 1vh;
+    display: flex;
+    flex-direction: column;
+}

@@ -1,0 +1,18 @@
+.container2{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap:wrap;
+    margin-top: 1vh;
+}
+.item1{
+    background-color: hotpink;
+    height: 40vh;
+    width: 100%;
+    border-radius: 1vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2vh;
+}

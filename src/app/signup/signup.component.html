@@ -1,0 +1,53 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">Input your credentials</div>
+  <div class="panel-body">
+    <form #singupForm="ngForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" [(ngModel)]="user.email" name="email" autofocus #email="ngModel" email minlength="3" required>
+        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+          <div *ngIf="email.errors.required">
+            email is required.
+          </div>
+          <div *ngIf="email.errors.minlength">
+            email must be at least 3 characters long.
+          </div>
+          <div *ngIf="email.errors.email">
+            email must be in the x@y
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="pass">Password</label>
+        <input type="password" class="form-control" id="pass" [(ngModel)]="user.pass" name="pass" #pass="ngModel" minlength="6" required>
+        <div *ngIf="pass.invalid && (pass.dirty || pass.touched)" class="alert alert-danger">
+          <div *ngIf="pass.errors.required">
+            password is required.
+          </div>
+          <div *ngIf="pass.errors.minlength">
+            password must be at least 6 characters long.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input type="text" class="form-control" id="phone" [(ngModel)]="user.phone" name="phone" #phone="ngModel" minlength="11" required>
+        <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="alert alert-danger">
+          <div *ngIf="phone.errors.required">
+            phone is required.
+          </div>
+          <div *ngIf="phone.errors.minlength">
+            phone must be at least 11 numbers long.
+          </div>
+        </div>
+      </div>
+      <div class="checkbox">
+        <label for="">
+          <input type="checkbox"> Remember me
+        </label>
+      </div>
+      <button type="submit" class="btn btn-default" [disabled]="!singupForm.form.valid" (click)="signUp()">Sign Up</button>
+    </form>
+  </div>
+</div>
