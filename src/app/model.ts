@@ -33,8 +33,8 @@ let businessInit = {
     pictures:[],
     contact:{
       location:{
-        lat:0,
-        lng:0
+        lat:35.7,
+        lng:51.4
       }
     }
   };

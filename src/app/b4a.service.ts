@@ -4,8 +4,10 @@ import {environment} from '../environments/environment';
 
 
 import {Parse} from 'parse';
+import { ParseError } from '@angular/compiler';
 
 @Injectable()
+
 
 export class B4aService {
 
@@ -21,11 +23,12 @@ export class B4aService {
     return new Promise((resolve,reject)=>{
       let user = Parse.User.current();
       let business = new this.Business;
-      
+      let point = new Parse.GeoPoint({latitude: b.contact.location.lat , longitude: b.contact.location.lng });
+      business.set('location',point);
       business.set('business',b);
       business.set('owner',user);
       business.set('members',[user]);
-
+      business.set('pictures',[]);
       business.save().then((b)=>{
         console.log('business ' , b.get('business'))
         resolve(b);
@@ -33,11 +36,20 @@ export class B4aService {
     })
   }
 
-  fetchBusinesses(){
+  fetchMyBusinesses(){
     return new Promise((resolve,reject)=>{
       let user = Parse.User.current();
       let query = new Parse.Query(this.Business);
       query.equalTo('owner',user);
+      query.find().then(results=>{
+        resolve(results);
+      })
+    })
+  }
+
+  fetchBusinesses(){
+    return new Promise((resolve,reject)=>{
+      let query = new Parse.Query(this.Business);
       query.find().then(results=>{
         resolve(results);
       })
@@ -50,6 +62,8 @@ export class B4aService {
       query.include('pictures');
       query.get(id).then(results=>{
         resolve(results);
+      }).catch(err=>{
+        reject(err);
       })
     })
   }
@@ -64,6 +78,17 @@ export class B4aService {
         })
       })
     })
+  }
+
+  removePictureFromBusiness(business,picture){
+    return new Promise((resolve,reject)=>{
+      business.remove('pictures',picture);
+      business.save().then((r)=>{
+        //console.log(r);
+        resolve(r);
+      });
+    })
+    
   }
 
   signUp(newUser){
@@ -119,21 +144,16 @@ export class B4aService {
     })
   }
 
-  saveFile(businessId,file){
+  saveFile(businessObject,file){
     return new Promise((res,rej)=>{
       let parseFile = new Parse.File(file.name,file);
       parseFile.save().then(()=>{
         console.log('File uploaded');
-        this.fetchBusiness(businessId).then((b:any)=>{
-          b.add('pictures',parseFile);
-          b.save().then((b)=>{
-            console.log('file associated with Business: ', b.get('business').title);
-            let imgSource = b.get('pic').url();
-            res(imgSource);
-          })
-
-        })
-        
+        businessObject.add('pictures',parseFile);
+        businessObject.save().then((b)=>{
+          console.log('file associated with Business: ', b.get('business').title);
+          res(b);
+        })        
       })
     })
   }

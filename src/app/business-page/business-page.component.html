@@ -1,28 +1,18 @@
 <div class="panel panel-primary">
-    <div class="panel-heading">{{business.title}}</div>
-    <div class="panel-body">
-      <div>Bio:
-        <p>{{business.bio}}</p>
-      </div>
-      <agm-map [latitude]="business.contact.location.lat" [longitude]="business.contact.location.lng" [zoom]="14" (mapClick)="mapClicked($event)">
-        <agm-marker [latitude]="business.contact.location.lat" [longitude]="business.contact.location.lng"></agm-marker>
-      </agm-map>
-      <br>
-      <button *ngIf="currentUser==businessOwner" type="submit" class="btn btn-default" (click)="goToEditBusiness()">Edit</button>
-    </div>  
-  </div>
-  <div class="row">
-    <div class="col-xs-4" *ngFor="let image of images">
-      <div class="thumbnail">
-        <a href="{{image}}">
-          <img src="{{image}}" alt="Lights" style="width:100vw">
-          <div class="caption">
-            <p></p>
-          </div>
-        </a>
-      </div>
+  <div class="panel-heading">{{business.title}}</div>
+  <div class="panel-body">
+    <div>Bio:
+      <p>{{business.bio}}</p>
     </div>
-  </div>
+    <agm-map [latitude]="business.contact.location.lat" [longitude]="business.contact.location.lng" [zoom]="14" (mapClick)="mapClicked($event)">
+      <agm-marker [latitude]="business.contact.location.lat" [longitude]="business.contact.location.lng"></agm-marker>
+    </agm-map>
+    <br>
+    <button *ngIf="currentUser==businessOwner" type="submit" class="btn btn-default" (click)="goToEditBusiness()">Edit</button>
+  </div>  
+</div>
+<app-gallery [businessId]="businessId" [parent]="pageName"></app-gallery>
+
 
   
   

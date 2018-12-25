@@ -23,6 +23,8 @@ import { BusinessPageComponent } from './business-page/business-page.component';
 import { EditBusinessComponent } from './edit-business/edit-business.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { GlyphSpinnerComponent } from './glyph-spinner/glyph-spinner.component';
+import { GalleryComponent } from './gallery/gallery.component';
+import { FetchNearestBusinessesComponent } from './fetch-nearest-businesses/fetch-nearest-businesses.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import { GlyphSpinnerComponent } from './glyph-spinner/glyph-spinner.component';
     BusinessPageComponent,
     EditBusinessComponent,
     SpinnerComponent,
-    GlyphSpinnerComponent
+    GlyphSpinnerComponent,
+    GalleryComponent,
+    FetchNearestBusinessesComponent
   ],
   imports: [
     BrowserModule,

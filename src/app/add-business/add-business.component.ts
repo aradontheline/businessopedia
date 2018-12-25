@@ -23,16 +23,12 @@ export class AddBusinessComponent implements OnInit {
       this.router.navigateByUrl('login');    
     }
     this.business = businessInit;
-    this.user = {
-      email:"",
-      pass:""
-    }
   }
 
   addBusiness(){
-    console.log(this.business)
-    this.b4aService.createBusiness(this.business).then((b:Business)=>{
-      console.log(b.title)
+    console.log('adding business: ')
+    this.b4aService.createBusiness(this.business).then((b:any)=>{
+      this.router.navigateByUrl('business-page/',b.id); 
     })
   }
 

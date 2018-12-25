@@ -16,6 +16,9 @@ export class BusinessPageComponent implements OnInit {
   currentUser;
   businessId;
   images:string[]=[];
+  array:number[] =[1,2,3]
+  
+  pageName:string="business-page";
 
   constructor(
     private route: ActivatedRoute,
@@ -32,11 +35,13 @@ export class BusinessPageComponent implements OnInit {
       this.images=b.get('pictures').map(image=>{
         return image._url;
       });
-
-    });
+    }).catch(err=>{
+      console.log(err)
+    })
     let currrentUser = this.b4aService.currentUser();
     if(currrentUser){
-      this.currentUser = this.b4aService.currentUser().id;   
+      this.currentUser = this.b4aService.currentUser().id;
+      console.log('businessOwner: ',this.businessOwner,' currentUser: ',this.currentUser);
     }
     
   }

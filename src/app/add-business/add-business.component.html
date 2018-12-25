@@ -26,13 +26,12 @@
             </div>
           </div>
       </div>
-      <agm-map [latitude]="business.contact.location.lat" [longitude]="business.contact.location.lng" (mapClick)="mapClicked($event)">
+      <br>
+      <agm-map [zoom]="14" [latitude]="business.contact.location.lat" [longitude]="business.contact.location.lng" (mapClick)="mapClicked($event)">
         <agm-marker [latitude]="business.contact.location.lat" [longitude]="business.contact.location.lng"></agm-marker>
       </agm-map>
+      <br>
       <button type="submit" class="btn btn-default" [disabled]="!addBusinessForm.form.valid" (click)="addBusiness()">Add</button>
     </form>
-    <p>
-      <a routerLink="/forgot-pass">Forgot Password</a>
-    </p>
   </div>  
 </div>

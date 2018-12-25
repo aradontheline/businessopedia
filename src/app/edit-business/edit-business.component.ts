@@ -18,6 +18,9 @@ export class EditBusinessComponent implements OnInit {
   currentUser; 
   businessId;
   uploading:boolean=false;
+  pageName:string="edit-business";
+  businessObject:any;
+  updatePictureGallery:boolean=false;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,6 +32,7 @@ export class EditBusinessComponent implements OnInit {
   ngOnInit() {
     this.businessId = this.route.snapshot.paramMap.get('id');
     this.b4aService.fetchBusiness(this.businessId).then((b:any)=>{
+      this.businessObject = b;
       this.business = b.get('business');
       this.businessOwner = b.get('owner').id;
     }).then(()=>{
@@ -43,7 +47,7 @@ export class EditBusinessComponent implements OnInit {
   }
   saveBusiness(){
     this.b4aService.updateBusiness(this.businessId,this.business).then(b=>{
-      console.log('saved b: ', b);
+      console.log('Business saved ');
       this.router.navigateByUrl('business-page/'+this.businessId);
     })
   }
@@ -62,13 +66,14 @@ export class EditBusinessComponent implements OnInit {
   }
 
   onFilesAdded($event){
-    console.log('File added: ',$event);
+    console.log('File added: ');
 
     if($event.target.files && $event.target.files.length > 0) {
       let file = $event.target.files[0];
       this.uploading = true;
-      this.b4aService.saveFile(this.businessId,file).then(s=>{
-        console.log(s);
+      this.b4aService.saveFile(this.businessObject,file).then((b:any)=>{
+        this.businessObject = b;
+        this.updatePictureGallery = !this.updatePictureGallery;
         this.uploading = false;
       })
     }

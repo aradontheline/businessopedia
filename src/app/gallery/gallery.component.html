@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-xs-4" *ngFor="let image of images;let i = index">
+    <div class="thumbnail">
+      <a href="{{image}}">
+        <img src="{{image}}" alt="Lights" style="width:100vw">
+        <div class="caption">
+          <p></p>
+        </div>
+      </a>
+      <button *ngIf="(currentUser === businessOwner) && edit" class="btn btn-danger btn-block" (click)="removePicture(i)">delete</button>
+    </div>
+  </div>
+</div>
