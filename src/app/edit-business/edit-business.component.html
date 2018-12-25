@@ -1,0 +1,42 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">Edit your business</div>
+    <div class="panel-body">
+      <form #addBusinessForm="ngForm">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" class="form-control" id="title" [(ngModel)]="business.title" name="title" autofocus #title="ngModel" minlength="5"  required>
+            <div *ngIf="title.invalid && (title.dirty || title.touched)" class="alert alert-danger">
+              <div *ngIf="title.errors.required">
+                Title is required.
+              </div>
+              <div *ngIf="title.errors.minlength">
+                Title must be at least 5 characters long.
+              </div>
+            </div>
+        </div>
+        <div class="form-group">
+          <label for="bio">Bio</label>
+          <textarea type="text" class="form-control" id="bio" [(ngModel)]="business.bio" name="bio" autofocus #bio="ngModel" minlength="5" rows="5"  required></textarea>
+            <div *ngIf="bio.invalid && (bio.dirty || bio.touched)" class="alert alert-danger">
+              <div *ngIf="bio.errors.required">
+                Bio is required.
+              </div>
+              <div *ngIf="bio.errors.minlength">
+                Bio must be at least 5 characters long.
+              </div>
+            </div>
+        </div>
+        <agm-map [latitude]="business.contact.location.lat" [longitude]="business.contact.location.lng" [zoom]="14" (mapClick)="mapClicked($event)">
+          <agm-marker [latitude]="business.contact.location.lat" [longitude]="business.contact.location.lng"></agm-marker>
+        </agm-map>
+        <br>
+        <label for="picUploadInput" class="btn btn-info"> 
+          <app-glyph-spinner *ngIf="uploading">Uploading...</app-glyph-spinner>
+          <span *ngIf="!uploading">Add Image</span>
+        </label>
+        <input type="file" style="visibility:hidden;" id="picUploadInput" (change)="onFilesAdded($event)" multiple>
+        <br>
+        <button type="submit" class="btn btn-default" [disabled]="!addBusinessForm.form.valid" (click)="saveBusiness()">Save</button>
+      </form>
+    </div>  
+  </div>

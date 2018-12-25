@@ -6,7 +6,7 @@
     flex-wrap:wrap;
     margin-top: 1vh;
 }
-.item1{
+.item{
     background-color: hotpink;
     height: 40vh;
     width: 100%;
@@ -15,4 +15,11 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 2vh;
+}
+.itemContent{
+    font-family: "Montserrat script=all rev=2", "Adobe Blank";
+}
+
+agm-map{
+    height:30vh;
 }

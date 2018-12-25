@@ -19,6 +19,10 @@ import { LoginComponent } from './login/login.component';
 import { ForgotPassComponent } from './forgot-pass/forgot-pass.component';
 import { AddBusinessComponent } from './add-business/add-business.component';
 import { MyBusinessesComponent } from './my-businesses/my-businesses.component';
+import { BusinessPageComponent } from './business-page/business-page.component';
+import { EditBusinessComponent } from './edit-business/edit-business.component';
+import { SpinnerComponent } from './spinner/spinner.component';
+import { GlyphSpinnerComponent } from './glyph-spinner/glyph-spinner.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +36,11 @@ import { MyBusinessesComponent } from './my-businesses/my-businesses.component';
     LoginComponent,
     ForgotPassComponent,
     AddBusinessComponent,
-    MyBusinessesComponent
+    MyBusinessesComponent,
+    BusinessPageComponent,
+    EditBusinessComponent,
+    SpinnerComponent,
+    GlyphSpinnerComponent
   ],
   imports: [
     BrowserModule,

@@ -1,3 +1,4 @@
+
 export interface User {
     email:string;
     pass:string;
@@ -7,6 +8,7 @@ export interface User {
 export interface Business{
     title:string;
     bio:string;
+    pictures:string[];
     contact?:{
         phone?:string;
         mobile?:string;
@@ -25,3 +27,16 @@ export interface Business{
         }
     }
 }
+let businessInit = {
+    title:'',
+    bio:'',
+    pictures:[],
+    contact:{
+      location:{
+        lat:0,
+        lng:0
+      }
+    }
+  };
+
+  export {businessInit};

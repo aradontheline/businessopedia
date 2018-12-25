@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {User,Business} from '../model';
+import {User,Business,businessInit} from '../model';
 import{ B4aService} from '../b4a.service';
 import {Router} from '@angular/router';
 import { MouseEvent as AGMMouseEvent } from '@agm/core';
@@ -22,16 +22,7 @@ export class AddBusinessComponent implements OnInit {
     if(!currrentUser){
       this.router.navigateByUrl('login');    
     }
-    this.business = {
-      title:"",
-      bio:"",
-      contact:{
-        location:{
-          lat:35,
-          lng:52
-        }
-      }
-    };
+    this.business = businessInit;
     this.user = {
       email:"",
       pass:""

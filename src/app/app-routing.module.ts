@@ -8,6 +8,8 @@ import { LoginComponent } from './login/login.component';
 import { ForgotPassComponent } from './forgot-pass/forgot-pass.component';
 import { AddBusinessComponent } from './add-business/add-business.component';
 import { MyBusinessesComponent } from './my-businesses/my-businesses.component';
+import { BusinessPageComponent } from './business-page/business-page.component';
+import { EditBusinessComponent } from './edit-business/edit-business.component';
 
 const routes: Routes = [
   {path:'search',component:SearchComponent},
@@ -17,7 +19,9 @@ const routes: Routes = [
   {path:'login',component:LoginComponent},
   {path:'forgot-pass',component:ForgotPassComponent},
   {path:'add-business',component:AddBusinessComponent},
-  {path:'my-businesses',component:MyBusinessesComponent}
+  {path:'my-businesses',component:MyBusinessesComponent},
+  {path:'business-page/:id',component:BusinessPageComponent},
+  {path:'edit-business/:id',component:EditBusinessComponent}
 ];
 
 @NgModule({

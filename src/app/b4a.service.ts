@@ -44,6 +44,28 @@ export class B4aService {
     })
   }
 
+  fetchBusiness(id){
+    return new Promise((resolve,reject)=>{
+      let query = new Parse.Query(this.Business);
+      query.include('pictures');
+      query.get(id).then(results=>{
+        resolve(results);
+      })
+    })
+  }
+
+  updateBusiness(id,business){
+    return new Promise((resolve,reject)=>{
+      let queryBusinesses = new Parse.Query(this.Business);
+      queryBusinesses.get(id).then(b=>{
+        b.set('business',business);
+        b.save().then((b)=>{
+          resolve(b);
+        })
+      })
+    })
+  }
+
   signUp(newUser){
     return new Promise((resolve,reject)=>{
       let user = new Parse.User();
@@ -97,20 +119,25 @@ export class B4aService {
     })
   }
 
-  saveFile(file){
+  saveFile(businessId,file){
     return new Promise((res,rej)=>{
-      let parseFile = new Parse.File(file.business,file);
+      let parseFile = new Parse.File(file.name,file);
       parseFile.save().then(()=>{
         console.log('File uploaded');
-        let user = Parse.User.current();
-        user.set('pic',parseFile);
-        user.save().then((user)=>{
-          console.log('file associated with user: ', user.get('userbusiness'));
-          let imgSource = user.get('pic').url();
-          res(imgSource);
+        this.fetchBusiness(businessId).then((b:any)=>{
+          b.add('pictures',parseFile);
+          b.save().then((b)=>{
+            console.log('file associated with Business: ', b.get('business').title);
+            let imgSource = b.get('pic').url();
+            res(imgSource);
+          })
+
         })
+        
       })
     })
   }
+
+  
 
 }

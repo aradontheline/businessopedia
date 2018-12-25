@@ -1,5 +1,5 @@
 <div class="container2">
-  <div class="item1" *ngFor="let b of businesses">
-    <div class="itemContent" (click)="goToAddBusiness()">{{b.business.title}}</div>
-  </div>
+  <a class="item" *ngFor="let b of businesses" [style.background-color]="colors()[0]" href="business-page/{{b.id}}">
+    <div class="itemContent" [style.color]="colors()[1]"><h1><strong>{{b.business.title}}</strong></h1></div>
+  </a>
 </div>
