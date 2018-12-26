@@ -75,4 +75,8 @@ export class FetchNearestBusinessesComponent implements OnInit {
     return [myColor,this.invertColor(myColor,true)]
   }
 
+  goToBusiness(id){
+    this.router.navigateByUrl('business-page/'+id);
+  }
+
 }

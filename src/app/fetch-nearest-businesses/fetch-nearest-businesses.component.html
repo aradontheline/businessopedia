@@ -1,3 +1,7 @@
+<agm-map [latitude]="businesses[0].business.contact.location.lat" [longitude]="businesses[0].business.contact.location.lng" [zoom]="12" >
+  <agm-marker *ngFor="let b of businesses" (markerClick)="goToBusiness(b.id)" [openInfoWindow]="true" [label]="b.business.title" [latitude]="b.business.contact.location.lat" [longitude]="b.business.contact.location.lng"></agm-marker>
+</agm-map>
+
 <div class="container">
   <a class="item" *ngFor="let b of businesses" [style.background-color]="colors()[0]" href="business-page/{{b.id}}">
     <div class="itemContent" [style.color]="colors()[1]">
