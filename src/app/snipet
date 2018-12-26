@@ -1,30 +1,48 @@
-.container{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
-    flex-wrap:wrap;
-    margin-top: 1vh;
-}
-.item{
-    background-color: hotpink;
-    height: 40vh;
-    width: 100%;
-    border-radius: 1vh;
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 2vh;
-}
-.itemContent{
-    font-family: "Montserrat script=all rev=2", "Adobe Blank";
-}
+<div class="row">
+  <div class="col-xs-6">
+    <div class="range">
+      <input type="range" name="range" min="1" max="100" value="50" onchange="range.value=value">
+      <output id="range">50</output>
+    </div>
+  </div>
+  <div class="col-xs-6">
+    <div class="range range-primary">
+      <input type="range" name="range" min="1" max="100" value="50" onchange="rangePrimary.value=value">
+      <output id="rangePrimary">50</output>
+    </div>
+  </div>
+</div>
 
-agm-map{
-    height:50vh;
-    border-radius: 2vh;
-}
+<div class="row">
+  <div class="col-xs-6">
+    <div class="range range-success">
+      <input type="range" name="range" min="1" max="100" value="50" onchange="rangeSuccess.value=value">
+      <output id="rangeSuccess">50</output>
+    </div>
+  </div>
+  <div class="col-xs-6">
+    <div class="range range-info">
+      <input type="range" name="range" min="1" max="100" value="50" onchange="rangeInfo.value=value">
+      <output id="rangeInfo">50</output>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-6">
+    <div class="range range-warning">
+      <input type="range" name="range" min="1" max="100" value="50" onchange="rangeWarning.value=value">
+      <output id="rangeWarning">50</output>
+    </div>
+  </div>
+  <div class="col-xs-6">
+    <div class="range range-danger">
+      <input type="range" name="range" min="1" max="100" value="50" onchange="rangeDanger.value=value">
+      <output id="rangeDanger">50</output>
+    </div>
+  </div>
+</div>
+
 
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,300);
 @import url(http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);

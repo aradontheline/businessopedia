@@ -5,6 +5,7 @@ import {environment} from '../environments/environment';
 
 import {Parse} from 'parse';
 import { ParseError } from '@angular/compiler';
+import { query } from '@angular/core/src/render3';
 
 @Injectable()
 
@@ -18,6 +19,20 @@ export class B4aService {
     Parse.serverURL = environment.serverURL;
     this.Business = new Parse.Object.extend('Business')
    }
+
+  cloudCode(){
+    Parse.Cloud.run("hello").then((res)=>{
+      console.log(res);
+    })
+  }
+
+  search(searchTerm){
+    let queryBusinesses = new Parse.Query(this.Business);
+    queryBusinesses.fullText('title',searchTerm)
+    queryBusinesses.find().then((results)=>{
+      console.log(results)
+    })
+  }  
 
   createBusiness(b){
     return new Promise((resolve,reject)=>{
@@ -47,9 +62,14 @@ export class B4aService {
     })
   }
 
-  fetchBusinesses(){
+  fetchBusinesses(currentPosition,distance,searchTerm){
     return new Promise((resolve,reject)=>{
-      let query = new Parse.Query(this.Business);
+      let userGeoPoint = new Parse.GeoPoint({latitude:currentPosition.lat,longitude:currentPosition.lng})
+      let query = new Parse.Query(this.Business);     
+      query.withinKilometers('location',userGeoPoint,distance,false);
+      if(searchTerm){
+        query.fullText('allText',searchTerm);
+      } 
       query.find().then(results=>{
         resolve(results);
       })

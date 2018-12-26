@@ -1,31 +1,54 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { B4aService } from '../b4a.service';
 import {Business} from '../model';
 import { Router } from '@angular/router';
+import { DataTransferService } from '../data-transfer.service';
 
 @Component({
   selector: 'app-fetch-nearest-businesses',
   templateUrl: './fetch-nearest-businesses.component.html',
   styleUrls: ['./fetch-nearest-businesses.component.css']
 })
-export class FetchNearestBusinessesComponent implements OnInit {
+export class FetchNearestBusinessesComponent implements OnInit, OnDestroy{
 
+  private subscription:Subscription;
   businesses:Business[];
+  currentPosition ={
+    lat:0,
+    lng:0
+  };
+  distance:number=50;
+  myLocationIconUrl:string="assets/myLocation.png";
+  searchTerm:string=undefined;
 
-  constructor(private b4aService:B4aService,private router:Router) { }
+  constructor(private b4aService:B4aService,private router:Router,private dataTransferService:DataTransferService) { }
 
-  ngOnInit() {
-    this.b4aService.fetchBusinesses().then((r:any)=>{
-      this.businesses= r.map(item=>{
-        return {
-          id:item.id,
-          business:item.get('business')
-        }
-      })
-      console.log(this.businesses);
+  ngOnInit() {    
+    navigator.geolocation.getCurrentPosition((pos)=>{
+      this.currentPosition = {
+        lat:pos.coords.latitude,
+        lng:pos.coords.longitude
+      }
+      console.log('location : ',this.currentPosition);
+      this.fetchBusinesses();
+    })
+
+    this.subscription = this.dataTransferService.notifyObservable$.subscribe((res)=>{
+      if (res.hasOwnProperty('option')) {
+        console.log(res.searchTerm);
+        // perform your other action from here
+        this.searchTerm = res.searchTerm;
+        this.fetchBusinesses();
+      }
     })
   } 
+
+  markerDragEnded($event){
+    console.log('Marker Drag Ended.\n',$event.coords);
+    this.currentPosition = $event.coords;
+    this.fetchBusinesses();
+  }
 
   randomColor(){
     let letters = '0123456789ABCDEF';
@@ -77,6 +100,27 @@ export class FetchNearestBusinessesComponent implements OnInit {
 
   goToBusiness(id){
     this.router.navigateByUrl('business-page/'+id);
+  }
+
+  distanceChanged(){
+    console.log('Distance updated: ', this.distance);
+    this.fetchBusinesses();
+  }
+
+  fetchBusinesses(){
+    this.b4aService.fetchBusinesses(this.currentPosition,this.distance/10,this.searchTerm).then((r:any)=>{
+      this.businesses= r.map(item=>{
+        return {
+          id:item.id,
+          business:item.get('business')
+        }
+      })
+      //console.log(this.businesses);
+    });
+  }
+
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
   }
 
 }

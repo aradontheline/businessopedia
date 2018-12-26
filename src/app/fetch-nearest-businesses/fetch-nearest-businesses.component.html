@@ -1,12 +1,23 @@
-<agm-map [latitude]="businesses[0].business.contact.location.lat" [longitude]="businesses[0].business.contact.location.lng" [zoom]="12" >
+<div class="row">
+  <div class="col-xs-12">
+    <div class="range range-primary">
+      <input type="range" name="range" min="1" max="200" [(ngModel)]="distance" (change)="distanceChanged()">
+      <output id="rangePrimary">{{distance/10}} <span>Km</span></output>
+    </div>
+  </div>
+</div>
+<br>
+<agm-map [latitude]="currentPosition.lat" [longitude]="currentPosition.lng" [zoom]="12" >  
+  <agm-marker [iconUrl]="myLocationIconUrl"  [latitude]="currentPosition.lat" [longitude]="currentPosition.lng" [markerDraggable]="true" (dragEnd)="markerDragEnded($event)"></agm-marker>
+  <agm-circle [latitude]="currentPosition.lat" [longitude]="currentPosition.lng" [radius]="distance*100"></agm-circle>
   <agm-marker *ngFor="let b of businesses" (markerClick)="goToBusiness(b.id)" [openInfoWindow]="true" [label]="b.business.title" [latitude]="b.business.contact.location.lat" [longitude]="b.business.contact.location.lng"></agm-marker>
 </agm-map>
 
 <div class="container">
-  <a class="item" *ngFor="let b of businesses" [style.background-color]="colors()[0]" href="business-page/{{b.id}}">
-    <div class="itemContent" [style.color]="colors()[1]">
+  <a class="item" *ngFor="let b of businesses"  href="business-page/{{b.id}}">
+    <div class="itemContent" >
       <h1><strong>{{b.business.title}}</strong></h1>      
     </div>
-    <small [style.color]="colors()[1]">{{b.business.bio}}</small>
+    <small >{{b.business.bio}}</small>
   </a>
 </div>

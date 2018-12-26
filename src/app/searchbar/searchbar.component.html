@@ -1,8 +1,8 @@
 <form action="search">
   <div class="input-group">
-    <input type="text" class="form-control" placeholder="Search a business in your area">
+    <input type="text" class="form-control" [(ngModel)]="searchTerm" name="searchTerm" placeholder="Search a business in your area">
     <div class="input-group-btn">
-      <button class="btn btn-default" type="submit">
+      <button class="btn btn-default" type="submit" (click)="search()">
         <i class="glyphicon glyphicon-search"></i>
       </button>
     </div>
