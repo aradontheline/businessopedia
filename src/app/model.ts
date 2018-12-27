@@ -32,6 +32,17 @@ let businessInit = {
     bio:'',
     pictures:[],
     contact:{
+        phone:'',
+        mobile:'',
+        address:{
+            country:'',
+            province:'',
+            city:'',
+            street1:'',
+            street2:'',
+            building:'',
+            unit:''
+        },
       location:{
         lat:35.7,
         lng:51.4

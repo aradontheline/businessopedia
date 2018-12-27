@@ -1,3 +1,6 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,300);
+@import url(http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
+
 .container{
     display: flex;
     justify-content: space-between;
@@ -5,9 +8,11 @@
     flex-direction: column;
     flex-wrap:wrap;
     margin-top: 1vh;
+    padding-right: 0%;
+    padding-left: 0%;
 }
 .item{
-    background-color: hotpink;
+    background-color: turquoise;
     height: 40vh;
     width: 100%;
     border-radius: 1vh;
@@ -26,8 +31,7 @@ agm-map{
     border-radius: 2vh;
 }
 
-@import url(http://fonts.googleapis.com/css?family=Roboto:400,300);
-@import url(http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
+
 
 body {
     padding: 70px 0px;

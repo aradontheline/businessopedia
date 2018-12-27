@@ -1,10 +1,10 @@
-<div class="panel panel-primary">
+<div class="panel panel-info">
   <div class="panel-heading">{{business.title}}</div>
   <div class="panel-body">
-    <div>Bio:
+    <div class="bio">
       <p>{{business.bio}}</p>
     </div>
-    <agm-map [latitude]="business.contact.location.lat" [longitude]="business.contact.location.lng" [zoom]="14" (mapClick)="mapClicked($event)">
+    <agm-map [latitude]="business.contact.location.lat" [longitude]="business.contact.location.lng" [zoom]="14">
       <agm-marker [latitude]="business.contact.location.lat" [longitude]="business.contact.location.lng"></agm-marker>
     </agm-map>
     <br>

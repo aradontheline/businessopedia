@@ -1,3 +1,10 @@
 agm-map{
     height: 30vh;
 }
+.bio{
+    background-color: rgb(197, 255, 236);
+    border-radius: 1vh;
+    padding:2vh;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+}

@@ -1,5 +1,14 @@
 .navbarchange{
     border-radius: 1vh;
-    background-color:lightblue;
+    background-color:turquoise;
+    color:white;
+}
+.navbar-inverse{
+    border-color: unset;
+}
+.navbar-brand{
+    color:white;
+}
+.navbar-nav>li>a{
     color:white;
 }
