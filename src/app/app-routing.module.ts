@@ -15,7 +15,7 @@ const routes: Routes = [
   {path:'search',component:SearchComponent},
   {path:'profile',component:ProfileComponent},
   {path:'signup',component:SignupComponent},
-  {path:'',component:HomeComponent},
+  {path:'',component:HomeComponent,pathMatch:'full'},
   {path:'login',component:LoginComponent},
   {path:'forgot-pass',component:ForgotPassComponent},
   {path:'add-business',component:AddBusinessComponent},
