@@ -25,6 +25,8 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { GlyphSpinnerComponent } from './glyph-spinner/glyph-spinner.component';
 import { GalleryComponent } from './gallery/gallery.component';
 import { FetchNearestBusinessesComponent } from './fetch-nearest-businesses/fetch-nearest-businesses.component';
+import { MyChatsComponent } from './my-chats/my-chats.component';
+import { ChatMessagesComponent } from './chat-messages/chat-messages.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import { FetchNearestBusinessesComponent } from './fetch-nearest-businesses/fetc
     SpinnerComponent,
     GlyphSpinnerComponent,
     GalleryComponent,
-    FetchNearestBusinessesComponent
+    FetchNearestBusinessesComponent,
+    MyChatsComponent,
+    ChatMessagesComponent
   ],
   imports: [
     BrowserModule,

@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import {environment} from '../environments/environment';
-
+import {Observable} from 'rxjs';
 
 
 import {Parse} from 'parse';
-import { ParseError } from '@angular/compiler';
-import { query } from '@angular/core/src/render3';
 
 @Injectable()
 
@@ -13,12 +11,98 @@ import { query } from '@angular/core/src/render3';
 export class B4aService {
 
   Business;
+  Chat;
+  Message;
+  client;
 
   constructor() {
     Parse.initialize(environment.PARSE_APP_ID, environment.PARSE_JS_KEY,environment.masterKey);
-    Parse.serverURL = environment.serverURL;
-    this.Business = new Parse.Object.extend('Business')
-   }
+    Parse.serverURL = environment.serverURL;    
+    Parse.liveQueryServerURL = environment.liveQueryServerURL;
+
+    this.client = new Parse.LiveQueryClient({
+      applicationId: environment.PARSE_APP_ID,
+      serverURL: environment.liveQueryServerURL, // Example: 'wss://livequerytutorial.back4app.io'
+      javascriptKey: environment.PARSE_JS_KEY
+    });
+
+    this.client.open();
+
+    this.Business = new Parse.Object.extend('Business');
+    this.Chat = new Parse.Object.extend('Chat');
+    this.Message = new Parse.Object.extend('Message');
+  }
+
+  createMessage(myMessage){
+    return  new Promise(async (resolve,reject)=>{
+      let currentUser =  Parse.User.current();
+      let receiverQuery = new Parse.Query(Parse.User);
+      receiverQuery.get('ISs5p0BcUn');
+      let receiver = await receiverQuery.first();
+      console.log('receiver: ', receiver);
+      let message = new this.Message;
+      //console.log('chat message: ',myChat);
+      message.set('message',myMessage.message);
+      message.set('sender',currentUser);
+      message.set('receiver',receiver);
+      message.set('unread',myMessage.unread);
+      message.save().then(c=>{
+        // let newChat = new this.Chat;
+        // newChat.set('owner',currentUser);
+        // newChat.set('member',receiver);
+        // newChat.set('total',1);
+        // newChat.set('unread',0);
+        // newChat.save();
+        console.log('created message: ',c);
+        resolve(c)
+      })
+    })
+  }
+
+  fetchMessages(){
+    return new Promise(async (resolve,reject)=>{      
+      let currentUser = await Parse.User.current();
+      //console.log('current User: ', currentUser.id);
+
+      let senderQuery = new Parse.Query(this.Message);
+      senderQuery.equalTo("sender",currentUser);
+
+      let receiverQuery = new Parse.Query(this.Message);
+      receiverQuery.equalTo("receiver",currentUser);
+
+      let mainQuery = Parse.Query.or(senderQuery,receiverQuery);
+      mainQuery.include("receiver");
+      mainQuery.include("sender");
+      mainQuery.find().then(messages => {
+        resolve(messages);
+        console.log( 'fetched chats: ',messages)
+      }).catch(error => {
+        alert('Failed to retrieving objects, with error code: ' + error.message);
+      });
+    });    
+  }
+  fetchNewMessage = new Observable((observer)=>
+  {
+      const query = new Parse.Query(this.Message);
+      query.ascending('createdAt').limit(20).find();
+      const subscription = this.client.subscribe(query);
+      subscription.on('create',message=>{
+        observer.next(message);
+      });   
+  })
+
+  fetchChats(user){
+    console.log('finding chats...')
+    return new Promise(async (resolve,reject)=>{
+      let currentUser = await Parse.User.current();
+      let chatQuery = new Parse.Query(this.Chat)
+      chatQuery.equalTo("owner",user);
+      chatQuery.find().then(chats=>{
+        console.log(chats);
+        resolve(chats);
+      })
+    })
+  }
 
   cloudCode(){
     Parse.Cloud.run("hello").then((res)=>{
@@ -177,7 +261,5 @@ export class B4aService {
       })
     })
   }
-
-  
 
 }

@@ -34,4 +34,8 @@ export class ProfileComponent implements OnInit {
     this.router.navigateByUrl('my-businesses');
   }
 
+  goToMyChats(){
+    this.router.navigateByUrl('my-chats');
+  }
+
 }

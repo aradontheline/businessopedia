@@ -27,6 +27,18 @@ export interface Business{
         }
     }
 }
+
+export interface Message{
+    message:string,
+    sender:object,
+    receiver:object,
+    unread:boolean
+}
+
+export interface Chat{
+    member:string
+}
+
 let businessInit = {
     title:'',
     bio:'',
@@ -50,4 +62,9 @@ let businessInit = {
     }
   };
 
-  export {businessInit};
+let chatInit = {
+    message:'hello',
+    unread:false
+}
+
+  export {businessInit,chatInit};

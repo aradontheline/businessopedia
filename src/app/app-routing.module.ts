@@ -10,6 +10,8 @@ import { AddBusinessComponent } from './add-business/add-business.component';
 import { MyBusinessesComponent } from './my-businesses/my-businesses.component';
 import { BusinessPageComponent } from './business-page/business-page.component';
 import { EditBusinessComponent } from './edit-business/edit-business.component';
+import { MyChatsComponent } from './my-chats/my-chats.component';
+import { ChatMessagesComponent } from './chat-messages/chat-messages.component';
 
 const routes: Routes = [
   {path:'search',component:SearchComponent},
@@ -21,7 +23,9 @@ const routes: Routes = [
   {path:'add-business',component:AddBusinessComponent},
   {path:'my-businesses',component:MyBusinessesComponent},
   {path:'business-page/:id',component:BusinessPageComponent},
-  {path:'edit-business/:id',component:EditBusinessComponent}
+  {path:'edit-business/:id',component:EditBusinessComponent},
+  {path:'my-chats',component:MyChatsComponent},
+  {path:'chat-messages',component:ChatMessagesComponent}
 ];
 
 @NgModule({

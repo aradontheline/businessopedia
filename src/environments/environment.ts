@@ -9,6 +9,7 @@ export const environment = {
   serverURL: 'https://parseapi.back4app.com',
   //databaseURI:'mongodb://admin:MhjRkE444WagVtah9hCTbh8l@mongodb.back4app.com:27017/ed50587ce7c64b43bcdbbde7975eb1bc?ssl=true',
   masterKey:'yKNOlZUgBjYRDzxlPT4ZSxA4CEVDPvQuhMzfVopj',
+  liveQueryServerURL: 'ws://livechat.back4app.io',
   googleMapsApiKey:'AIzaSyDTck1rPVHOp6Zt5egbdad1ZZbDU2i1aC0'
 };
 
