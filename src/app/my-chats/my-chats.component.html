@@ -1,16 +1,6 @@
 <div class="list-group">
-  <div class="list-group-item list-group-item-success" *ngFor="let chat of chats;let i=index" (click)="goToChatMessages(i)">
-    {{chat.username}}
-    <div class="list-group-item list-group-item-info" *ngFor="let message of chat.messages">{{message.message}}</div>
+  <div class="list-group-item list-group-item-success" *ngFor="let chat of chats;let i=index" (click)="goToChatMessages(chat.member.id,i)">
+    {{chat.member.get("username")}}
+    <span class="badge badge-info">{{chat.unread}}</span>
   </div>
-</div>  
-<form>
-  <div class="input-group">
-    <input type="text" class="form-control" placeholder="type" [(ngModel)]="newMessage" name="newMessage">
-    <div class="input-group-btn">
-      <button class="btn btn-default" (click)="sendMessage()">
-        <i class="glyphicon glyphicon-send"></i>
-      </button>
-    </div>
-  </div>
-</form>
+</div>

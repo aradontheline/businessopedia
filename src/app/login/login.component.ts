@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     console.log('Login page')
-    let currrentUser = this.b4aService.currentUser();
+    let currrentUser = this.b4aService.currentUser;
     if(currrentUser){
       this.router.navigateByUrl('profile');
     }

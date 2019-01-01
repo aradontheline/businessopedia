@@ -25,7 +25,7 @@ const routes: Routes = [
   {path:'business-page/:id',component:BusinessPageComponent},
   {path:'edit-business/:id',component:EditBusinessComponent},
   {path:'my-chats',component:MyChatsComponent},
-  {path:'chat-messages',component:ChatMessagesComponent}
+  {path:'chat-messages/:id',component:ChatMessagesComponent}
 ];
 
 @NgModule({

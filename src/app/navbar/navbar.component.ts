@@ -15,7 +15,7 @@ export class NavbarComponent implements OnInit {
   constructor(private b4aService : B4aService) { }
 
   ngOnInit() {
-    let currrentUser = this.b4aService.currentUser();
+    let currrentUser = this.b4aService.currentUser;
     if(currrentUser){
       this.user = currrentUser;
       this.username = this.user.get('email');

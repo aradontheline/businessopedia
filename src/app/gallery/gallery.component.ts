@@ -27,9 +27,9 @@ export class GalleryComponent implements OnInit {
 
   ngOnInit() {
     this.updateGalleryPictures();
-    let currrentUser = this.b4aService.currentUser();
+    let currrentUser = this.b4aService.currentUser;
     if(currrentUser){
-      this.currentUser = this.b4aService.currentUser().id;   
+      this.currentUser = this.b4aService.currentUser.id;   
     };
     if(this.parent == "edit-business"){
       this.edit = true;

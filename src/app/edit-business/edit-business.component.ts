@@ -36,7 +36,7 @@ export class EditBusinessComponent implements OnInit {
       this.business = b.get('business');
       this.businessOwner = b.get('owner').id;
     }).then(()=>{
-      this.currentUser = this.b4aService.currentUser().id;
+      this.currentUser = this.b4aService.currentUser.id;
       //console.log('current user: '+this.currentUser);
       //console.log('owner: '+this.businessOwner);
       if(this.currentUser != this.businessOwner){

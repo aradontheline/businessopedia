@@ -205,3 +205,11 @@ body {
 .range.range-danger input[type="range"] {
     outline-color: rgb(217, 83, 79);
 }
+
+
+<ul>
+                  <li><i class="fas fa-user-circle"></i> View profile</li>
+                  <li><i class="fas fa-users"></i> Add to close friends</li>
+                  <li><i class="fas fa-plus"></i> Add to group</li>
+                  <li><i class="fas fa-ban"></i> Block</li>
+                </ul>

@@ -1,3 +1,40 @@
-<p>
-  chat-messages works!
-</p>
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-header">
+        <div class="header-item-1">
+          <div class="header-item-inside-item">
+            <img src="/assets/1.jpg" class="img-circle user_img">
+            <span class="online_icon"></span>
+          </div>
+        </div>
+        <div class="header-item-2">
+          <span>Chat with {{member?.get("username")}}</span>
+          <p>{{chat?.get("total")}} Messages</p>
+        </div>
+        <div class="header-item-3">
+          <i class="glyphicon glyphicon-earphone" style="color:green"></i>
+        </div>
+        <div class="header-item-4">              
+          <div class="header-item-inside-item glyphicon glyphicon-option-vertical"></div>
+        </div>
+    </div>
+    <div class="card-body" #scrollMe>
+      <div class="message" *ngFor="let message of messages;let i=index">
+          <div [class.message-sender]="message.owner" [class.pull-right]="message.owner" [class.message-receiver]="!message.owner">
+              {{message.message}}
+            <p class="message-time">{{message.createdAt.getHours()}}:{{message.createdAt.getMinutes()}}</p>
+          </div>
+      </div>        
+    </div>
+    <div class="card-footer">
+      <div class="input-group">
+        <textarea type="text" class="form-control text-input" placeholder="type" [(ngModel)]="newMessage" name="newMessage"></textarea>
+        <div class="input-group-btn">
+          <button class="btn btn-default" (click)="sendMessage()">
+            <i class="glyphicon glyphicon-send"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

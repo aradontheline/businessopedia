@@ -38,10 +38,10 @@ export class BusinessPageComponent implements OnInit {
     }).catch(err=>{
       console.log(err)
     })
-    let currrentUser = this.b4aService.currentUser();
+    let currrentUser = this.b4aService.currentUser;
     if(currrentUser){
-      this.currentUser = this.b4aService.currentUser().id;
-      console.log('businessOwner: ',this.businessOwner,' currentUser: ',this.currentUser);
+      this.currentUser = this.b4aService.currentUser.id;
+      //console.log('businessOwner: ',this.businessOwner,' currentUser: ',this.currentUser);
     }
     
   }

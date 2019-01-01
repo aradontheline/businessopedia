@@ -15,7 +15,7 @@ export class MyBusinessesComponent implements OnInit {
   constructor(private b4aService:B4aService,private router:Router) { }
 
   ngOnInit() {
-    let currrentUser = this.b4aService.currentUser();
+    let currrentUser = this.b4aService.currentUser;
     if(!currrentUser){
       this.router.navigateByUrl('login');    
     }
