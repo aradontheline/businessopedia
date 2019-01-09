@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="">
   <div class="card">
     <div class="card-header">
         <div class="header-item-1">
@@ -9,7 +9,7 @@
         </div>
         <div class="header-item-2">
           <span>Chat with {{member?.get("username")}}</span>
-          <p>{{chat?.get("total")}} Messages</p>
+          <p>{{chat?.get("total")+noOfNewMessages}} Messages</p>
         </div>
         <div class="header-item-3">
           <i class="glyphicon glyphicon-earphone" style="color:green"></i>
@@ -28,9 +28,9 @@
     </div>
     <div class="card-footer">
       <div class="input-group">
-        <textarea type="text" class="form-control text-input" placeholder="type" [(ngModel)]="newMessage" name="newMessage"></textarea>
+        <input type="text" class="form-control text-input" placeholder="type" [(ngModel)]="newMessage" name="newMessage">
         <div class="input-group-btn">
-          <button class="btn btn-default" (click)="sendMessage()">
+          <button class="btn btn-primary" (click)="sendMessage()">
             <i class="glyphicon glyphicon-send"></i>
           </button>
         </div>

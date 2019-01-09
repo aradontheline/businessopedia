@@ -29,6 +29,7 @@ export class BusinessPageComponent implements OnInit {
 
   ngOnInit() {
     this.businessId = this.route.snapshot.paramMap.get('id');
+    //console.log("b id from b page: ", this.businessId);
     this.b4aService.fetchBusiness(this.businessId).then((b:any)=>{
       this.business = b.get('business');
       this.businessOwner = b.get('owner').id;
@@ -37,6 +38,8 @@ export class BusinessPageComponent implements OnInit {
       });
     }).catch(err=>{
       console.log(err)
+      this.router.navigateByUrl('not-found'); 
+
     })
     let currrentUser = this.b4aService.currentUser;
     if(currrentUser){
@@ -48,6 +51,10 @@ export class BusinessPageComponent implements OnInit {
 
   goToEditBusiness(){
     this.router.navigateByUrl('edit-business/'+this.businessId); 
+  }
+
+  sendMessage(){
+    this.router.navigateByUrl('chat-messages/'+this.businessOwner); 
   }
 
 }

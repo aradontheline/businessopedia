@@ -28,23 +28,24 @@ export class MyChatsComponent implements OnInit {
   fetchChats(){
     this.b4aService.fetchChats(this.currentUser).then((chats:any)=>{
       this.chats = chats.map((chat:any)=>{
-        //console.log("number of unread: ", chat.get("unread"));
+        let unread = (this.currentUser.id == chat.get("members")[0].id)?chat.get("noOfUnreadMember1"):chat.get("noOfUnreadMember2");
+        let member = chat.get("members").filter((member)=>{
+          return member.id != this.currentUser.id;
+        })
         return {
-          member:chat.get("member"),
+          member:member[0],
           chatId:chat.id,
-          unread:chat.get("unread"),
+          unread:unread,
           total:chat.get("total")
         }
       });
-      console.log(this.chats)
+      //console.log(this.chats)
     })
   }
-
+  
   goToChatMessages(id,index){
     //console.log(id);
-    this.router.navigateByUrl('chat-messages/'+id+'?cid='+this.chats[index].chatId);
+    let chatId = this.chats[index].chatId;
+    this.router.navigateByUrl('chat-messages/'+id+'?cid='+chatId);
   }
-
-
-
 }

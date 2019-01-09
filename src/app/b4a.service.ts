@@ -1,13 +1,9 @@
 import { Injectable } from '@angular/core';
 import {environment} from '../environments/environment';
-import {Observable} from 'rxjs';
-
-
+import {Observable, from as ObservableFrom} from 'rxjs';
 import {Parse} from 'parse';
 
 @Injectable()
-
-
 export class B4aService {
 
   Business;
@@ -15,32 +11,35 @@ export class B4aService {
   Message;
   client;
   currentUser;
+  liveMessageSubscription;
 
   constructor() {
-    Parse.initialize(environment.PARSE_APP_ID, environment.PARSE_JS_KEY,environment.masterKey);
+    Parse.initialize(environment.PARSE_APP_ID, environment.masterKey);
     Parse.serverURL = environment.serverURL;    
     Parse.liveQueryServerURL = environment.liveQueryServerURL;
 
     this.client = new Parse.LiveQueryClient({
       applicationId: environment.PARSE_APP_ID,
-      serverURL: environment.liveQueryServerURL, // Example: 'wss://livequerytutorial.back4app.io'
-      javascriptKey: environment.PARSE_JS_KEY
+      serverURL: environment.liveQueryServerURL
     });
 
     this.client.open();
-
     this.currentUser = Parse.User.current();
-
     this.Business = new Parse.Object.extend('Business');
     this.Chat = new Parse.Object.extend('Chat');
     this.Message = new Parse.Object.extend('Message');
   }
 
+  unsubscribeASubscription(subscription){
+    if(subscription == 'liveMessageSubscription'){
+      console.log('unsubscribing liveMessageSubscription...');
+      this.liveMessageSubscription.unsubscribe();
+    }
+
+  }
+
   createMessage(myMessage){
     return  new Promise(async (resolve,reject)=>{
-      let receiverQuery = new Parse.Query(Parse.User);
-      receiverQuery.get('QjHfDyWFlh');
-      let receiver = await receiverQuery.first();
       //console.log('receiver: ', receiver);
       let message = new this.Message;
       //console.log('chat message: ',myChat);
@@ -48,49 +47,21 @@ export class B4aService {
       message.set('sender',myMessage.sender);
       message.set('receiver',myMessage.receiver);
       message.set('unread',myMessage.unread);
-      message.save().then(c=>{
-        // let newChat = new this.Chat;
-        // newChat.set('owner',currentUser);
-        // newChat.set('member',receiver);
-        // newChat.set('total',1);
-        // newChat.set('unread',0);
-        // newChat.save();
-        //console.log('created message: ',c);
-        resolve(c)
-      })
+      message.save();
     })
   }
-
-  fetchMessages(memberId){
-    return new Promise(async (resolve,reject)=>{      
-      let currentUser = await Parse.User.current();
-      let memberQuery = new Parse.Query(Parse.User);
-      memberQuery.get(memberId);
-      let member = await memberQuery.first();
-      //console.log('member: ', member);
-
-      let senderQuery = new Parse.Query(this.Message);
-      senderQuery.equalTo("sender",currentUser);
-      senderQuery.equalTo("receiver",member);
-
-
-      let receiverQuery = new Parse.Query(this.Message);
-      receiverQuery.equalTo("receiver",currentUser);
-      receiverQuery.equalTo("sender",member);
-
-      let mainQuery = Parse.Query.or(senderQuery,receiverQuery);
-      mainQuery.include("receiver");
-      mainQuery.include("sender");
-      mainQuery.find().then(messages => {
-        resolve(messages);
-        //console.log( 'fetched Messages: ',messages)
-      }).catch(error => {
-        alert('Failed to retrieving objects, with error code: ' + error.message);
-      });
-    });    
+  async fetchMessages(chat){
+    let messageQuery = new Parse.Query(this.Message);
+    let chatIds = chat.get("messages").map(message=>{
+      return message.id;
+    })
+    messageQuery.containedIn("objectId",chatIds);
+    messageQuery.include("sender");
+    messageQuery.ascending("createdAt");
+    const messages= await messageQuery.find()
+    return ObservableFrom(messages);
   }
-  fetchNewMessage(member):Observable<any>{ 
-    
+  fetchNewMessage(member){
     let currentUser = Parse.User.current();
     let senderQuery = new Parse.Query(this.Message);
     senderQuery.equalTo("sender",currentUser);
@@ -106,34 +77,42 @@ export class B4aService {
     mainQuery.find();
 
     const myObservable$ = new Observable((observer)=>{
-      const subscription = this.client.subscribe(mainQuery);
-      subscription.on('create',(message)=>{
+      this.liveMessageSubscription = this.client.subscribe(mainQuery);
+      this.liveMessageSubscription.on('open',()=>{
+        console.log("subscription opened...");
+      })
+      this.liveMessageSubscription.on('close',()=>{
+        console.log("subscription closed...");
+      })
+      this.liveMessageSubscription.on('create',(message)=>{
+        //console.log("new message: ",message);
         observer.next(message);
       });
     });
     return myObservable$;      
+  } 
+
+  async updateMessageSeenStatus(message){
+    message.set("unread",false);
+    message.save();
   }
-  
 
   fetchChats(user){
     console.log('finding chats...')
     return new Promise(async (resolve,reject)=>{
       let chatQuery = new Parse.Query(this.Chat)
-      chatQuery.equalTo("owner",user);
-      chatQuery.include("member");
-      chatQuery.find().then(chats=>{
-        //console.log(chats);
-        resolve(chats);
-      })
+      chatQuery.equalTo("members",user);
+      chatQuery.include("members");
+      resolve(chatQuery.find());
     })
   }
 
   fetctChat(member){
     return new Promise(async(resolve,reject)=>{
       let chatQuery = new Parse.Query(this.Chat);
-      chatQuery.equalTo("owner",this.currentUser);
-      chatQuery.equalTo("member",member);
+      chatQuery.containedIn("members",[this.currentUser,member]);
       chatQuery.first().then(chat=>{
+        //console.log("chat: ",chat)
         resolve(chat);
       })
     })
@@ -163,8 +142,9 @@ export class B4aService {
       business.set('owner',user);
       business.set('members',[user]);
       business.set('pictures',[]);
+      business.set('allText','');
       business.save().then((b)=>{
-        console.log('business ' , b.get('business'))
+        //console.log('business ' , b.get('business'))
         resolve(b);
       })
     })
@@ -211,6 +191,8 @@ export class B4aService {
     return new Promise((resolve,reject)=>{
       let queryBusinesses = new Parse.Query(this.Business);
       queryBusinesses.get(id).then(b=>{
+        let point = new Parse.GeoPoint({latitude: business.contact.location.lat , longitude: business.contact.location.lng });
+        b.set('location',point);
         b.set('business',business);
         b.save().then((b)=>{
           resolve(b);
@@ -231,12 +213,12 @@ export class B4aService {
   }
 
   signUp(newUser){
+    console.log("new user: ", newUser)
     return new Promise((resolve,reject)=>{
       let user = new Parse.User();
-      user.set('userbusiness',newUser.email);
+      user.set('username',newUser.email);
       user.set('email',newUser.email);
       user.set('password',newUser.pass);
-      user.set('phone',newUser.phone);
       user.signUp(null).then(user=>{
         resolve(user);
       });

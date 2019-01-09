@@ -42,7 +42,11 @@ export class EditBusinessComponent implements OnInit {
       if(this.currentUser != this.businessOwner){
         this.router.navigateByUrl('business-page/'+this.businessId);
       }
-    })
+    }).catch(err=>{
+      console.log(err)
+      this.router.navigateByUrl('not-found'); 
+
+    });
     
   }
   saveBusiness(){

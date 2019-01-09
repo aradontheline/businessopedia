@@ -27,6 +27,7 @@ import { GalleryComponent } from './gallery/gallery.component';
 import { FetchNearestBusinessesComponent } from './fetch-nearest-businesses/fetch-nearest-businesses.component';
 import { MyChatsComponent } from './my-chats/my-chats.component';
 import { ChatMessagesComponent } from './chat-messages/chat-messages.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { ChatMessagesComponent } from './chat-messages/chat-messages.component';
     GalleryComponent,
     FetchNearestBusinessesComponent,
     MyChatsComponent,
-    ChatMessagesComponent
+    ChatMessagesComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,

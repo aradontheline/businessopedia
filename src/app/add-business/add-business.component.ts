@@ -14,6 +14,7 @@ export class AddBusinessComponent implements OnInit {
 
   business:Business;
   user:User;
+  currentPosition;
 
   constructor(private b4aService:B4aService,private router:Router) { }
 
@@ -23,12 +24,23 @@ export class AddBusinessComponent implements OnInit {
       this.router.navigateByUrl('login');    
     }
     this.business = businessInit;
+    navigator.geolocation.getCurrentPosition((pos)=>{
+      this.currentPosition = {
+        lat:pos.coords.latitude,
+        lng:pos.coords.longitude
+      }
+      //console.log('location : ',this.currentPosition);      
+      this.business.contact.location.lat = this.currentPosition.lat;
+      this.business.contact.location.lng = this.currentPosition.lng;
+    });
+
   }
 
   addBusiness(){
     console.log('adding business: ')
     this.b4aService.createBusiness(this.business).then((b:any)=>{
-      this.router.navigateByUrl('business-page/',b.id); 
+      //console.log("b id: ", b.id);
+      this.router.navigateByUrl('business-page/'+b.id); 
     })
   }
 

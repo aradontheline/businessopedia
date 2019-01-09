@@ -4,51 +4,133 @@ Parse.Cloud.define("hello", function(request, response){
     response.success("Hello world!");
 });
 
+Parse.Cloud.define("changeUnreadMessages",async (request,response)=>{
+  let Log = new Parse.Object.extend("Log");
+  let log = new Log;
+  let userId = request.params.user;
+  let memberId=request.params.member;
+  //let Business = new Parse.Object.extend('Business');
+  //let Chat = new Parse.Object.extend('Chat');
+  let Message = new Parse.Object.extend('Message');
+
+  let userQuery = new Parse.Query(Parse.User);
+  userQuery.get(userId);
+  let currentUser = await userQuery.first();
+  
+  let memberQuery = new Parse.Query(Parse.User);
+  memberQuery.get(memberId);
+  let member = await memberQuery.first();
+  //console.log('member: ', member);
+
+  let senderQuery = new Parse.Query(Message);
+  senderQuery.equalTo("sender",currentUser);
+  senderQuery.equalTo("receiver",member);
+
+  let receiverQuery = new Parse.Query(Message);
+  receiverQuery.equalTo("receiver",currentUser);
+  receiverQuery.equalTo("sender",member);
+
+  let mainQuery = Parse.Query.or(senderQuery,receiverQuery);
+  mainQuery.include("receiver");
+  mainQuery.include("sender");
+  mainQuery.find().then(messages => {
+    let counter = 0;    
+    messages.map((message)=>{      
+      if(message.get("receiver").id === currentUser.id){
+        if(message.get("unread")==true){
+          message.set("unread",false);
+          message.save()
+        } 
+      }           
+    })    
+    //log.save();
+  })
+  response.success("how you doin?");
+})
+
 Parse.Cloud.afterSave("Message",async (request,response)=>{
+  let Log = new Parse.Object.extend("Log");
   let message = request.object;
   let sender = message.get("sender");
   let receiver = message.get("receiver");
- 
-  const queryChatWhereOwnerIsSender = new Parse.Query("Chat");
-  queryChatWhereOwnerIsSender.equalTo('owner',sender);
-  queryChatWhereOwnerIsSender.equalTo('member',receiver);
-  let chat1 = await queryChatWhereOwnerIsSender.first();
-  if(chat1){
-    request.log.info('chat id ', chat1.id)
-    chat1.increment('total');
-    chat1.save();
-  }else{
-    let Chat = new Parse.Object.extend("Chat");
-    let newChat = new Chat;
-    newChat.set("owner",sender);
-    newChat.set("member",receiver);
-    newChat.set("total",1);
-    newChat.set("unread",0);
-    newChat.save();
-  }
-
-  const queryChatWhereOwnerIsReceiver = new Parse.Query("Chat");
-  queryChatWhereOwnerIsReceiver.equalTo('owner',receiver);
-  queryChatWhereOwnerIsReceiver.equalTo('member',sender);
-  let chat2 = await queryChatWhereOwnerIsReceiver.first();
-  if(chat2){
-    let Log = new Parse.Object.extend("Log");
-    let log = new Log;
-    log .set("content",chat2.id );
+  let status = message.get("creatingOperation");
+  let chats = message.get("chats");
+  let log0 = new Log;
+  log0.set("content3",chats.length);
+  log0.save();
+  if(chats.length>0){
+    let log1 = new Log;
+    log1.set("content4",chats.length);
     log.save();
-    request.log.info('chat id ', chat2.id)
-    chat2.increment('total');
-    chat2.increment('unread');
-    chat2.save();
+    message.get("chats").map((chat)=>{
+      let counter = 0;
+      let messages = chat.get("messages")
+      messages.map((message)=>{
+        if(message.get("unread")){
+          counter+=1;
+        }
+      })
+      chat.set("unread",counter);
+      chat.save();
+    })
   }else{
-    let Chat = new Parse.Object.extend("Chat");
-    let newChat = new Chat;
-    newChat.set("owner",receiver);
-    newChat.set("member",sender);
-    newChat.set("total",1);
-    newChat.set("unread",1);
-    newChat.save();
-  }
+    const queryChatWhereOwnerIsSender = new Parse.Query("Chat");
+    queryChatWhereOwnerIsSender.equalTo('owner',sender);
+    queryChatWhereOwnerIsSender.equalTo('member',receiver);
+    let chat1 = await queryChatWhereOwnerIsSender.first();
+    if(chat1){
+      chat1.addUnique("messages",message)
+      chat1.save().then((chat)=>{
+        message.addUnique("chats",chat);
+        message.save();        
+        chat.set("total",chat.get("messages").length);
+        chat.save();
+      });
+    }else{
+      let Chat = new Parse.Object.extend("Chat");
+      let newChat = new Chat;
+      newChat.set("owner",sender);
+      newChat.set("member",receiver);
+      newChat.set("messages",[message]);
+      newChat.set("total",1);
+      newChat.set("unread",0);
+      newChat.save().then((chat)=>{
+        message.addUnique("chats",chat);
+        message.save();
+      });
+    }
+  
+    const queryChatWhereOwnerIsReceiver = new Parse.Query("Chat");
+    queryChatWhereOwnerIsReceiver.equalTo('owner',receiver);
+    queryChatWhereOwnerIsReceiver.equalTo('member',sender);
+    let chat2 = await queryChatWhereOwnerIsReceiver.first();
+    if(chat2){
+      chat2.addUnique("messages",message)
+      chat2.increment('unread');
+      chat2.save().then((chat)=>{
+        message.addUnique("chats",chat);
+        message.save();
+        chat.set("total",chat.get("messages").length);
+        chat.save();
+      });
+    }else{
+      let Chat = new Parse.Object.extend("Chat");
+      let newChat = new Chat;
+      newChat.set("owner",receiver);
+      newChat.set("member",sender);
+      newChat.set("messages",[message]);
+      newChat.set("total",1);
+      newChat.set("unread",1);
+      newChat.save().then((chat)=>{
+        message.addUnique("chats",chat);
+        message.save();
+      });
+    }
+    if(message.get("creatingOperation")){
+      message.set("creatingOperation",false);
+      message.save();
+    }    
+  }  
 });
 
 Parse.Cloud.afterDelete("Message",async (request,response)=>{

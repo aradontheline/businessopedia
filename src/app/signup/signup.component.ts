@@ -16,13 +16,14 @@ export class SignupComponent implements OnInit {
   constructor(private b4aService : B4aService,private router:Router) { }
 
   ngOnInit() {
-    let currrentUser = this.b4aService.currentUser();
+    let currrentUser = this.b4aService.currentUser;
     if(currrentUser){
       this.router.navigateByUrl('/');
     }
     this.user={
       email:'',
       pass:''
+      
     }
   }
 
@@ -31,7 +32,7 @@ export class SignupComponent implements OnInit {
     .then(
       (user:any)=>{
         console.log(`user ${user.get('username')} created`);
-        let currentUser = this.b4aService.currentUser();
+        let currentUser = this.b4aService.currentUser;
         if(currentUser){
           console.log('logged in');
         }

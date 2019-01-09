@@ -30,7 +30,7 @@ export class FetchNearestBusinessesComponent implements OnInit, OnDestroy{
         lat:pos.coords.latitude,
         lng:pos.coords.longitude
       }
-      console.log('location : ',this.currentPosition);
+      //console.log('location : ',this.currentPosition);
       this.fetchBusinesses();
     })
 
